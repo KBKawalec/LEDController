@@ -13,7 +13,7 @@ unsigned int keys2;
 
 //NRF
 RF24 myRadio (10, A1);
-byte addresses[6] = {'j','j','k','a','b','e'};
+byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
 Package data;
 
 //Rotary encoder
@@ -33,15 +33,17 @@ int pinAStateLast = pinAstateCurrent;
 int counter = 1;
 int previousState;
 
+int blinkCounter = 50;
+
 int switchCounter;
 unsigned long int lastSwitch;
-void updateSwitch(){
-  if(millis() - lastSwitch > 200) {
+void updateSwitch() {
+  if (millis() - lastSwitch > 200) {
     switchCounter = ( switchCounter + 1 ) % 2;
     lastSwitch = millis();
   }
 }
-  
+
 
 void updatea() {
 
@@ -49,13 +51,36 @@ void updatea() {
      library already uses interrupts which could cause errors. Therefore do not use functions
      of the Serial libray in your interrupt callback.
   */
+  int tempCounters;
+  switch (counter) {
+    case 1 :
+      tempCounters = counter;
+      break;
+    case 2 :
+      tempCounters = counter;
+      break;
+    case 3 :
+      if (switchCounter == 0) {
+        tempCounters = counter;
+      }
+      else {
+        tempCounters = blinkCounter;
+      }
+
+      break;
+    case 4 :
+      tempCounters = counter;
+
+      break;
+
+  }
 
   // ROTATION DIRECTION
   pinAstateCurrent = digitalRead(outputA);    // Read the current state of Pin A
   if ((previousState == 1 && pinAStateLast == 1 && pinAstateCurrent == 0
        && digitalRead(outputB) == 1)) {
 
-    counter--;
+    tempCounters--;
     previousState = 0;
 
   }
@@ -65,21 +90,45 @@ void updatea() {
   if ((pinAStateLast == LOW) && (pinAstateCurrent == HIGH)) {
 
     if (digitalRead(outputB) == HIGH) {      // If Pin B is HIGH
-      counter++;
+      tempCounters++;
       previousState = 1;
     }
     else {
-      counter--;
+      tempCounters--;
       previousState = 0;
     }
-    if (counter < 1) counter = 4;
 
-    if (counter > 4)  counter = 1;
   }
 
   pinAStateLast = pinAstateCurrent;        // Store the latest read value in the currect state variable
+  switch (counter) {
+    case 1 :
+      counter = tempCounters;
+      break;
+    case 2 :
+      counter = tempCounters;
+      break;
+    case 3 :
+      if (switchCounter == 0) {
+        counter = tempCounters;
+      }
+      else {
+        blinkCounter = tempCounters;
+      }
+
+      break;
+    case 4 :
+      counter = tempCounters;
+
+      break;
+
+  }
+  if (counter < 1) counter = 4;
+
+  if (counter > 4)  counter = 1;
 
 }
+
 void displayOLED() {
   oled.clear();
   oled.setCursor(0, 4);
@@ -93,7 +142,13 @@ void displayOLED() {
       oled.println(F("Dynamic"));
       break;
     case 3 :
-      oled.println(F("Blink"));
+      if (switchCounter == 0) {
+        oled.println(F("Blink"));
+      }
+      else {
+        oled.println(blinkCounter);
+
+      }
       break;
     case 4 :
       oled.println(F("Candle"));
@@ -130,8 +185,9 @@ void initialize() {
   pinMode (outputB, INPUT);
   digitalWrite (outputA, HIGH);
   digitalWrite (outputB, HIGH);
-  
+
   digitalWrite (switchPin, HIGH);
+  switchCounter = 1;
 
 
 
@@ -176,6 +232,7 @@ void setNRF() {
   data.blue = button2;
   data.counter = counter;
   data.switchPinValue = switchCounter;
+  data.blinkCounterValue = blinkCounter;
   memcpy(data.buttonState, touchkeys.buttonstate, sizeof(data.buttonState));
 
 }

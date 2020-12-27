@@ -13,6 +13,7 @@ struct package
   int buttonState[8];
   int counter;
   int switchPinValue;
+  int blinkCounterValue;
 };
 
 byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
@@ -116,7 +117,7 @@ void loop()
 
     }
   }
-  delay(50);
+  delay(data.blinkCounterValue);
   for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
     for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
       if ( stripPattern[i] == 3)
@@ -127,7 +128,7 @@ void loop()
 
   }
   FastLED.show();
-  delay(50);
+  delay(data.blinkCounterValue);
 }
 
 void staticLEDS(int i) {

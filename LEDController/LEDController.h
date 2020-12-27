@@ -53,6 +53,7 @@ struct package
   int buttonState[8];
   int counter;
   int switchPinValue;
+  int blinkCounterValue = 50;
 };
 typedef struct package Package;
 extern Package data;
@@ -110,6 +111,7 @@ extern Touchkeys touchkeys;
 //Used for the rotary encoder and to keep track of the current value (counter) 
 extern int counter;
 extern int switchCounter;
+extern int blinkCounter;
 
 
 #endif

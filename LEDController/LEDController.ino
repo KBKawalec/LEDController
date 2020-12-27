@@ -3,17 +3,21 @@
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   initialize();
+  delay(1000);
 
 
 }
 int tempCount = counter;
+int tempSwitchCount = switchCounter;
+int tempBlinkCounter = blinkCounter;
 void loop() {
   unsigned long newt = millis();
   unsigned int tempKeys2 = GetKeys2();
   unsigned int tempKeys1 = GetKeys1();
-  //Serial.print(digitalRead(2));
+  Serial.print(counter);
+  Serial.print(blinkCounter);
 
 
 
@@ -34,13 +38,15 @@ void loop() {
     setSlider2();
 
   }
-  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter) {
+  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter) {
     setNRF();
     NRFTransmit();
   }
-  if (tempCount != counter) {
+  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter) {
     displayOLED();
     tempCount = counter;
+    tempSwitchCount = switchCounter;
+    tempBlinkCounter = blinkCounter;
   }
   // Serial.println(millis() - newt);
   for (int i = 0; i < 8; i++) {
@@ -54,8 +60,8 @@ void loop() {
   }
   FastLED.show();
 
-//  Serial.println(millis() - newt);
-//  Serial.println("----------------------------------");
-//  delay(500);
+  //  Serial.println(millis() - newt);
+  //  Serial.println("----------------------------------");
+  //  delay(500);
 
 }
