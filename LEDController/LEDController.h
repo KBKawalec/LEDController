@@ -54,6 +54,8 @@ struct package
   int counter;
   int switchPinValue;
   int blinkCounterValue = 50;
+  int firstMode;
+  int thirdMode;
 };
 typedef struct package Package;
 extern Package data;

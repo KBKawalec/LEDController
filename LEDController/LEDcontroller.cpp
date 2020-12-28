@@ -37,9 +37,34 @@ int blinkCounter = 50;
 
 int switchCounter;
 unsigned long int lastSwitch;
+int thirdMode;
+int firstMode;
 void updateSwitch() {
   if (millis() - lastSwitch > 200) {
     switchCounter = ( switchCounter + 1 ) % 2;
+    // firstMode = 0;
+
+    switch (counter) {
+      case 1 :
+        thirdMode = 0;
+        firstMode = ( firstMode + 1 ) % 2;
+
+
+        break;
+      case 2 :
+        thirdMode = 0;
+        break;
+      case 3 :
+        thirdMode = ( thirdMode + 1 ) % 2;
+
+
+        break;
+      case 4 :
+        thirdMode = 0;
+
+        break;
+
+    }
     lastSwitch = millis();
   }
 }
@@ -55,12 +80,13 @@ void updatea() {
   switch (counter) {
     case 1 :
       tempCounters = counter;
+
       break;
     case 2 :
       tempCounters = counter;
       break;
     case 3 :
-      if (switchCounter == 0) {
+      if (thirdMode == 0) {
         tempCounters = counter;
       }
       else {
@@ -109,7 +135,7 @@ void updatea() {
       counter = tempCounters;
       break;
     case 3 :
-      if (switchCounter == 0) {
+      if (thirdMode == 0) {
         counter = tempCounters;
       }
       else {
@@ -136,13 +162,20 @@ void displayOLED() {
 
   switch (counter) {
     case 1 :
-      oled.println(F("Static"));
+      if (firstMode == 0) {
+        oled.println(F("Color"));
+      }
+      else {
+        oled.println(F("Behaviour"));
+
+      }
+
       break;
     case 2 :
       oled.println(F("Dynamic"));
       break;
     case 3 :
-      if (switchCounter == 0) {
+      if (thirdMode == 0) {
         oled.println(F("Blink"));
       }
       else {
@@ -233,6 +266,8 @@ void setNRF() {
   data.counter = counter;
   data.switchPinValue = switchCounter;
   data.blinkCounterValue = blinkCounter;
+  data.firstMode = firstMode;
+  data.thirdMode = thirdMode;
   memcpy(data.buttonState, touchkeys.buttonstate, sizeof(data.buttonState));
 
 }
