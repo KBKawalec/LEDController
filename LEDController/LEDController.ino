@@ -16,8 +16,8 @@ void loop() {
   unsigned long newt = millis();
   unsigned int tempKeys2 = GetKeys2();
   unsigned int tempKeys1 = GetKeys1();
-  Serial.print(counter);
-  Serial.print(blinkCounter);
+//  Serial.print(counter);
+//  Serial.print(blinkCounter);
 
 
 

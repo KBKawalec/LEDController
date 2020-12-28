@@ -5,7 +5,7 @@
 CRGB leds[NUM_LEDS];
 int button1 = 8; // So that it starts out off
 int button2;
-int button3;
+int button3 = 7;
 int button4;
 unsigned int keys;
 unsigned int keys2;
