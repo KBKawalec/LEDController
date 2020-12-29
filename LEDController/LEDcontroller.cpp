@@ -1,6 +1,6 @@
 
 #include "LEDController.h"
-
+#include "NRF.h"
 
 CRGB leds[NUM_LEDS];
 int button1 = 8; // So that it starts out off
@@ -11,10 +11,9 @@ unsigned int keys;
 unsigned int keys2;
 
 
-//NRF
-RF24 myRadio (10, A1);
-byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
-Package data;
+
+
+
 
 //Rotary encoder
 
@@ -103,6 +102,7 @@ void updatea() {
 
   // ROTATION DIRECTION
   pinAstateCurrent = digitalRead(outputA);    // Read the current state of Pin A
+  delayMicroseconds(10);
   if ((previousState == 1 && pinAStateLast == 1 && pinAstateCurrent == 0
        && digitalRead(outputB) == 1)) {
 
@@ -111,7 +111,7 @@ void updatea() {
 
   }
 
-
+  delayMicroseconds(10);
   // If there is a minimal movement of 1 step
   if ((pinAStateLast == LOW) && (pinAstateCurrent == HIGH)) {
 
@@ -195,9 +195,13 @@ void initialize() {
 
 
   pinMode(KEYS, INPUT);
+  delayMicroseconds(10);
   pinMode(CLOCK, OUTPUT);
+  delayMicroseconds(10);
   pinMode(KEYS2, INPUT);
+  delayMicroseconds(10);
   pinMode(CLOCK2, OUTPUT);
+  delayMicroseconds(10);
   pinMode(LED_PIN, OUTPUT);
 
   Wire.begin();
@@ -215,10 +219,13 @@ void initialize() {
 
 
   pinMode (outputA, INPUT);
+  delayMicroseconds(10);
   pinMode (outputB, INPUT);
+  delayMicroseconds(10);
   digitalWrite (outputA, HIGH);
+  delayMicroseconds(10);
   digitalWrite (outputB, HIGH);
-
+  delayMicroseconds(10);
   digitalWrite (switchPin, HIGH);
   switchCounter = 1;
 
@@ -240,12 +247,8 @@ void initialize() {
   }
 
 
-  //NRF Initialization
-  myRadio.begin();
-  myRadio.setChannel(115);
-  myRadio.setPALevel(RF24_PA_MAX);
-  myRadio.setDataRate( RF24_250KBPS ) ;
-  myRadio.openWritingPipe( addresses);
+  //Initialzing the NRF
+  NRFinitialization();
 
   attachInterrupt(digitalPinToInterrupt(outputB), updatea, CHANGE);
   attachInterrupt(digitalPinToInterrupt(switchPin), updateSwitch, FALLING);
@@ -255,22 +258,7 @@ void initialize() {
 
 
 
-void NRFTransmit() {
-  myRadio.write(&data, sizeof(data));
-}
 
-void setNRF() {
-  data.red = button3 - 7;
-  data.green = 8 - button1;
-  data.blue = button2;
-  data.counter = counter;
-  data.switchPinValue = switchCounter;
-  data.blinkCounterValue = blinkCounter;
-  data.firstMode = firstMode;
-  data.thirdMode = thirdMode;
-  memcpy(data.buttonState, touchkeys.buttonstate, sizeof(data.buttonState));
-
-}
 unsigned int GetKeys2()
 {
   keys = 0;

@@ -16,7 +16,7 @@
 // Define proper RST_PIN if required.
 #define RST_PIN -1
 
-#include "RF24.h"
+
 
 
 
@@ -38,27 +38,9 @@
 #define NUM_LEDS    29
 #define DELAY_TIME 100
 #define MAXBRIGHT 100
-#define speed 1
 
-//NRF
 
-extern void NRFTransmit();
-extern void setNRF();
 
-struct package
-{
-  int red;
-  int green;
-  int blue;
-  int buttonState[8];
-  int counter;
-  int switchPinValue;
-  int blinkCounterValue = 50;
-  int firstMode;
-  int thirdMode;
-};
-typedef struct package Package;
-extern Package data;
 
 // initializs pins and values
 extern void initialize();
@@ -108,6 +90,9 @@ struct Touchkeys {
   
 };
 extern Touchkeys touchkeys;
+
+extern int firstMode;
+extern int thirdMode;
 
 
 //Used for the rotary encoder and to keep track of the current value (counter) 
