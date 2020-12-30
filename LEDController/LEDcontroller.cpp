@@ -1,6 +1,9 @@
 
 #include "LEDController.h"
 #include "NRF.h"
+#include "OLED.h"
+#include "rotaryEncoderInterrupt.h"
+
 
 CRGB leds[NUM_LEDS];
 int button1 = 8; // So that it starts out off
@@ -25,19 +28,16 @@ unsigned int keys2;
 int LEDvalues[8] = {4, 5, 6, 7, 3, 2, 1, 0};
 Touchkeys touchkeys;
 
-SSD1306AsciiWire oled;
 
-int pinAstateCurrent = LOW;                // Current state of Pin A
-int pinAStateLast = pinAstateCurrent;
-int counter = 1;
-int previousState;
+
+
 
 int blinkCounter = 50;
 
 int switchCounter;
 unsigned long int lastSwitch;
-int thirdMode;
-int firstMode;
+
+
 void updateSwitch() {
   if (millis() - lastSwitch > 200) {
     switchCounter = ( switchCounter + 1 ) % 2;
@@ -47,21 +47,32 @@ void updateSwitch() {
       case 1 :
         thirdMode = 0;
         firstMode = ( firstMode + 1 ) % 2;
+        fifthMode = 0;
+
 
 
         break;
       case 2 :
         thirdMode = 0;
+        fifthMode = 0;
+
         break;
       case 3 :
         thirdMode = ( thirdMode + 1 ) % 2;
-
+        fifthMode = 0;
 
         break;
       case 4 :
         thirdMode = 0;
+        fifthMode = 0;
 
         break;
+      case 5 :
+        thirdMode = 0;
+        fifthMode = ( fifthMode + 1 ) % 2;
+
+        break;
+
 
     }
     lastSwitch = millis();
@@ -69,127 +80,9 @@ void updateSwitch() {
 }
 
 
-void updatea() {
+int BRIGHTNESS = 255;
 
-  /* WARNING: For this example I've used Serial.println within the interrupt callback. The Serial
-     library already uses interrupts which could cause errors. Therefore do not use functions
-     of the Serial libray in your interrupt callback.
-  */
-  int tempCounters;
-  switch (counter) {
-    case 1 :
-      tempCounters = counter;
 
-      break;
-    case 2 :
-      tempCounters = counter;
-      break;
-    case 3 :
-      if (thirdMode == 0) {
-        tempCounters = counter;
-      }
-      else {
-        tempCounters = blinkCounter;
-      }
-
-      break;
-    case 4 :
-      tempCounters = counter;
-
-      break;
-
-  }
-
-  // ROTATION DIRECTION
-  pinAstateCurrent = digitalRead(outputA);    // Read the current state of Pin A
-  delayMicroseconds(10);
-  if ((previousState == 1 && pinAStateLast == 1 && pinAstateCurrent == 0
-       && digitalRead(outputB) == 1)) {
-
-    tempCounters--;
-    previousState = 0;
-
-  }
-
-  delayMicroseconds(10);
-  // If there is a minimal movement of 1 step
-  if ((pinAStateLast == LOW) && (pinAstateCurrent == HIGH)) {
-
-    if (digitalRead(outputB) == HIGH) {      // If Pin B is HIGH
-      tempCounters++;
-      previousState = 1;
-    }
-    else {
-      tempCounters--;
-      previousState = 0;
-    }
-
-  }
-
-  pinAStateLast = pinAstateCurrent;        // Store the latest read value in the currect state variable
-  switch (counter) {
-    case 1 :
-      counter = tempCounters;
-      break;
-    case 2 :
-      counter = tempCounters;
-      break;
-    case 3 :
-      if (thirdMode == 0) {
-        counter = tempCounters;
-      }
-      else {
-        blinkCounter = tempCounters;
-      }
-
-      break;
-    case 4 :
-      counter = tempCounters;
-
-      break;
-
-  }
-  if (counter < 1) counter = 4;
-
-  if (counter > 4)  counter = 1;
-
-}
-
-void displayOLED() {
-  oled.clear();
-  oled.setCursor(0, 4);
-  oled.set2X();
-
-  switch (counter) {
-    case 1 :
-      if (firstMode == 0) {
-        oled.println(F("Color"));
-      }
-      else {
-        oled.println(F("Behaviour"));
-
-      }
-
-      break;
-    case 2 :
-      oled.println(F("Dynamic"));
-      break;
-    case 3 :
-      if (thirdMode == 0) {
-        oled.println(F("Blink"));
-      }
-      else {
-        oled.println(blinkCounter);
-
-      }
-      break;
-    case 4 :
-      oled.println(F("Candle"));
-      oled.println(F("light"));
-      break;
-
-  }
-}
 
 void initialize() {
 
@@ -204,16 +97,9 @@ void initialize() {
   delayMicroseconds(10);
   pinMode(LED_PIN, OUTPUT);
 
-  Wire.begin();
-  Wire.setClock(400000L);
+  OLEDInitialize(); // initialization of parameters for OLED
 
-#if RST_PIN >= 0
-  oled.begin(&Adafruit128x64, I2C_ADDRESS, RST_PIN);
-#else // RST_PIN >= 0
-  oled.begin(&Adafruit128x64, I2C_ADDRESS);
-#endif // RST_PIN >= 0
 
-  oled.setFont(Adafruit5x7);
 
 
 

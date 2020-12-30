@@ -6,22 +6,6 @@
 #include <SPI.h>
 #include <Wire.h>
 
-#include "string.h"
-#include "SSD1306Ascii.h"
-#include "SSD1306AsciiWire.h"
-
-// 0X3C+SA0 - 0x3C or 0x3D
-#define I2C_ADDRESS 0x3C
-
-// Define proper RST_PIN if required.
-#define RST_PIN -1
-
-
-
-
-
-
-
 
 //Rotary encoder pins
 #define outputA 7
@@ -39,7 +23,7 @@
 #define DELAY_TIME 100
 #define MAXBRIGHT 100
 
-
+extern int BRIGHTNESS;
 
 
 // initializs pins and values
@@ -91,8 +75,7 @@ struct Touchkeys {
 };
 extern Touchkeys touchkeys;
 
-extern int firstMode;
-extern int thirdMode;
+
 
 
 //Used for the rotary encoder and to keep track of the current value (counter) 

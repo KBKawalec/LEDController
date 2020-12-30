@@ -1,6 +1,8 @@
 
 #include "LEDController.h"
 #include "NRF.h"
+#include "OLED.h"
+
 
 
 void setup() {
@@ -13,12 +15,13 @@ void setup() {
 int tempCount = counter;
 int tempSwitchCount = switchCounter;
 int tempBlinkCounter = blinkCounter;
+int BRIGHTNESSFlag = BRIGHTNESS;
 void loop() {
   unsigned long newt = millis();
   unsigned int tempKeys2 = GetKeys2();
   unsigned int tempKeys1 = GetKeys1();
-//  Serial.print(counter);
-//  Serial.print(blinkCounter);
+  //  Serial.print(counter);
+  //  Serial.print(blinkCounter);
 
 
 
@@ -39,15 +42,16 @@ void loop() {
     setSlider2();
 
   }
-  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter) {
+  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter || BRIGHTNESSFlag != BRIGHTNESS) {
     setNRF();
     NRFTransmit();
   }
-  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter) {
+  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter || BRIGHTNESSFlag != BRIGHTNESS) {
     displayOLED();
     tempCount = counter;
     tempSwitchCount = switchCounter;
     tempBlinkCounter = blinkCounter;
+    BRIGHTNESSFlag = BRIGHTNESS;
   }
   // Serial.println(millis() - newt);
   for (int i = 0; i < 8; i++) {

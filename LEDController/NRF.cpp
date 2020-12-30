@@ -1,6 +1,8 @@
 #include "NRF.h"
 #include "LEDController.h"
 #include "RF24.h"
+#include "rotaryEncoderInterrupt.h"
+
 
 
 //NRF
@@ -8,8 +10,8 @@ RF24 myRadio (10, A1);
 byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
 Package data;
 
-void NRFinitialization(){
-    //NRF Initialization
+void NRFinitialization() {
+  //NRF Initialization
   myRadio.begin();
   myRadio.setChannel(115);
   myRadio.setPALevel(RF24_PA_MAX);
@@ -30,6 +32,9 @@ void setNRF() {
   data.blinkCounterValue = blinkCounter;
   data.firstMode = firstMode;
   data.thirdMode = thirdMode;
+ // data.NUM_LEDS = numberOfLEDS;
+  data.BRIGHTNESS = BRIGHTNESS;
+
   memcpy(data.buttonState, touchkeys.buttonstate, sizeof(data.buttonState));
 
 }

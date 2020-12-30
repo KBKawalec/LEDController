@@ -23,13 +23,19 @@ void doFire(int red, int green, int blue, int beginningStrip, int endStrip)
 
 //
 
-
-
+int prev1NUM_LEDS = NUM_LEDS;
+byte *heat = new  byte[NUM_LEDS];
 void Fire2012WithPalette(int beginningStrip, int endStrip)
 {
   // Array of temperature readings at each simulation cell
   int ledSize = endStrip - beginningStrip;
-  static byte heat[NUM_LEDS];
+
+  if (prev1NUM_LEDS != NUM_LEDS) {
+    delete [] heat;
+    *heat = new byte[NUM_LEDS];
+
+  }
+
 
   // Step 1.  Cool down every cell a little
   for ( int i = 0; i < ledSize; i++) {

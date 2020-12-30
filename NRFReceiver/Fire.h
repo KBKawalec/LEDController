@@ -4,7 +4,7 @@
 #include <FastLED.h>
 #include "NRFReceiver.h"
 
-#define BRIGHTNESS  255
+
 #define FRAMES_PER_SECOND 35
 // COOLING: How much does the air cool as it rises?
 // Less cooling = taller flames.  More cooling = shorter flames.

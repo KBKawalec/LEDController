@@ -8,14 +8,33 @@
 #include <FastLED.h>
 
 
-#define NUM_LEDS    30
 #define LED_PIN     2
 
 
-extern CRGB leds[NUM_LEDS];
+extern int NUM_LEDS;
+extern CRGB *leds;
+extern RF24 myRadio;
+extern byte addresses[6];
+extern int BRIGHTNESS;
 
 
 
+struct package
+{
+  int red;
+  int green;
+  int blue;
+  int buttonState[8];
+  int counter;
+  int switchPinValue;
+  int blinkCounterValue;
+  int firstMode;
+  int thirdMode;
+  int NUM_LEDS;
+  int BRIGHTNESS;
+};
+
+typedef struct package Package;
 
 
 

@@ -24,6 +24,9 @@ struct package
   int blinkCounterValue = 50;
   int firstMode;
   int thirdMode;
+  int numberOfLEDS;
+  int BRIGHTNESS;
+
 };
 typedef struct package Package;
 

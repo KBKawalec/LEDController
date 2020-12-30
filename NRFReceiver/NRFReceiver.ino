@@ -2,23 +2,8 @@
 #include "Fire.h"
 
 
-CRGB leds[NUM_LEDS];
 
-RF24 myRadio (7, 8);
-struct package
-{
-  int red;
-  int green;
-  int blue;
-  int buttonState[8];
-  int counter;
-  int switchPinValue;
-  int blinkCounterValue;
-  int firstMode;
-  int thirdMode;
-};
 
-byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
 
 int LEDstripLength = NUM_LEDS;
 int segment = LEDstripLength / 8;
@@ -27,12 +12,20 @@ int previousGreen;
 int previousBlue;
 int previousButtonState[8];
 
-typedef struct package Package;
+int count;
+int stripPattern[8];
+int stripColor[8][3];
+
+
+
+CRGB *leds = new CRGB[NUM_LEDS];
 Package data;
+
 void setup()
 {
   Serial.begin(9600);
   delay(1000);
+
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   myRadio.begin();
   myRadio.setChannel(115);
@@ -43,9 +36,7 @@ void setup()
   myRadio.startListening();
   attachInterrupt(digitalPinToInterrupt(3), interuptFunc, FALLING);
 }
-int count;
-int stripPattern[8];
-int stripColor[8][3];
+
 void interuptFunc() {
   if (myRadio.available()) {
     while (myRadio.available())
@@ -62,6 +53,12 @@ void interuptFunc() {
           stripColor[i][1] = data.green;
           stripColor[i][2] = data.blue;
 
+        }
+        if (data.NUM_LEDS > 0 && data.NUM_LEDS < 3000) {
+          NUM_LEDS = data.NUM_LEDS;
+        }
+        if(data.BRIGHTNESS >= 0 && data.BRIGHTNESS <=255){
+          BRIGHTNESS = data.BRIGHTNESS;
         }
 
       }
@@ -95,11 +92,14 @@ void interuptFunc() {
 
   count++;
 }
-
+int prevNUM_LEDS = NUM_LEDS;
 void loop()
 {
+  if (prevNUM_LEDS != NUM_LEDS) {
+    delete [] leds;
+    *leds = new CRGB[NUM_LEDS];
 
-
+  }
   int ledStripLengthBufferBeg =  0;
 
 
@@ -140,7 +140,7 @@ void loop()
               break;
             }
           } // For each time the chain is broken we call the function so that there can be unconnected segments
-          doFire(stripColor[i][0] * 255 / 7 , stripColor[i][1] * 255 / 7, stripColor[i][2] * 255 / 7, ledStripLengthBufferBeg, LEDstripLength  * (i + 1) / 8);
+          doFire(stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7, ledStripLengthBufferBeg, LEDstripLength  * (i + 1) / 8);
 
 
         }
@@ -180,27 +180,23 @@ void loop()
 }
 
 void staticLEDS(int i) {
-  for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
-    leds[j] = CRGB (stripColor[i][0] * 255 / 7 , stripColor[i][1] * 255 / 7, stripColor[i][2] * 255 / 7);
-  }
+  paintLEDS(i);
   FastLED.show();
 }
 
 void dynamicLEDS(int i) {
-  for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
-    leds[j] = CRGB (stripColor[i][0] * 255 / 7 , stripColor[i][1] * 255 / 7, stripColor[i][2] * 255 / 7);
-
-
-  }
+  paintLEDS(i);
   FastLED.show();
 
 }
 void blinkLEDS(int i) {
-  for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
-    leds[j] = CRGB (stripColor[i][0] * 255 / 7 , stripColor[i][1] * 255 / 7, stripColor[i][2] * 255 / 7);
-
-  }
+  paintLEDS(i);
   FastLED.show();
 
+}
+void paintLEDS(int i) {
+  for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
+    leds[j] = CRGB (stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7);
 
+  }
 }
