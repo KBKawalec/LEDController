@@ -17,6 +17,8 @@ int tempSwitchCount = switchCounter;
 int tempBlinkCounter = blinkCounter;
 int BRIGHTNESSFlag = BRIGHTNESS;
 void loop() {
+  
+  
   unsigned long newt = millis();
   unsigned int tempKeys2 = GetKeys2();
   unsigned int tempKeys1 = GetKeys1();

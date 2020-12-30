@@ -3,8 +3,11 @@
 #include "LEDController.h"
 #include "RF24.h"
 
+#define UPPPERLIMITOFOPTIONS  5
+
 int counter = 1;
-int upperLimitOptions = 5;
+
+int whichMode[UPPPERLIMITOFOPTIONS];
 
 int fifthMode;
 int thirdMode;
@@ -56,7 +59,7 @@ void updatea() {
   if ((previousState == 1 && pinAStateLast == 1 && pinAstateCurrent == 0
        && digitalRead(outputB) == 1)) {
 
-    if ( counter == 5) tempCounters = tempCounters - 5;
+    if ( counter == 5 && fifthMode) tempCounters = tempCounters - 5;
     else tempCounters--;
     previousState = 0;
 
@@ -67,12 +70,12 @@ void updatea() {
   if ((pinAStateLast == LOW) && (pinAstateCurrent == HIGH)) {
 
     if (digitalRead(outputB) == HIGH) {      // If Pin B is HIGH
-      if ( counter == 5) tempCounters = tempCounters + 5;
+      if ( counter == 5 && fifthMode) tempCounters = tempCounters + 5;
       else tempCounters++;
       previousState = 1;
     }
     else {
-      if ( counter == 5) tempCounters = tempCounters - 5;
+      if ( counter == 5 && fifthMode) tempCounters = tempCounters - 5;
       else tempCounters--;
       previousState = 0;
     }
@@ -111,8 +114,8 @@ void updatea() {
       break;
 
   }
-  if (counter < 1) counter = upperLimitOptions;
+  if (counter < 1) counter = UPPPERLIMITOFOPTIONS;
 
-  if (counter > upperLimitOptions)  counter = 1;
+  if (counter > UPPPERLIMITOFOPTIONS)  counter = 1;
 
 }

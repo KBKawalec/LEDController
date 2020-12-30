@@ -12,25 +12,12 @@ int button3 = 7;
 int button4;
 unsigned int keys;
 unsigned int keys2;
+int BRIGHTNESS = 255;
 
-
-
-
-
-
-//Rotary encoder
-
-//int aState;
-//int aLastState;
-//int flag = 1;
 
 
 int LEDvalues[8] = {4, 5, 6, 7, 3, 2, 1, 0};
 Touchkeys touchkeys;
-
-
-
-
 
 int blinkCounter = 50;
 
@@ -80,7 +67,7 @@ void updateSwitch() {
 }
 
 
-int BRIGHTNESS = 255;
+
 
 
 
@@ -220,17 +207,15 @@ void getSlider3() {
     if (slider3 == capactiveValues[i]) {
       if (  i == 0 ) {
 
-        if (pressed3 == false && (millis() - new_time3 > 400 )) {
-          button3 = i + 8;
-          new_time3 = millis();
-          pressed3 = true;
-        }
-        else {
-          if ( (millis() - new_time3 > 400 )) {
-            button3--;
-            new_time3 = millis();
-            pressed3 = false;
+        if ( (millis() - new_time3 > 400 ) ) {
+          if (button3 !=  8) {
+            button3 = i + 8;
           }
+          else {
+            button3--;
+          }
+          new_time3 = millis();
+
         }
 
       }
@@ -255,17 +240,16 @@ void getSlider2() {
 
       if (  i == 6 ) {
 
-        if (pressed == false && (millis() - new_time1 > 400 )) {
-          button1 = i + 1;
-          new_time1 = millis();
-          pressed = true;
-        }
-        else {
-          if ( (millis() - new_time1 > 400 )) {
-            button1++;
-            new_time1 = millis();
-            pressed = false;
+        if ((millis() - new_time1 > 400 )  ) {
+          if (button1 != 7) {
+            button1 = i + 1;
           }
+          else {
+            button1++;
+
+          }
+          new_time1 = millis();
+
         }
 
       }
@@ -293,17 +277,16 @@ void getSlider1() {
     if (slider1 == capactiveValues2[i]) {
       if (  i == 0 ) {
 
-        if (pressed2 == false && (millis() - new_time2 > 400 )) {
-          button2 = i + 1;
-          new_time2 = millis();
-          pressed2 = true;
-        }
-        else {
-          if ( (millis() - new_time2 > 400 )) {
-            button2--;
-            new_time2 = millis();
-            pressed2 = false;
+        if ((millis() - new_time2 > 400 )) {
+          if ( button2 != 1) {
+            button2 = i + 1;
           }
+          else {
+            button2--;
+
+          }
+          new_time2 = millis();
+
         }
 
       }

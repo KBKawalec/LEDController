@@ -9,10 +9,11 @@
 
 
 #define LED_PIN     2
+#define MAXLEDS 200
 
 
 extern int NUM_LEDS;
-extern CRGB *leds;
+extern CRGB leds[MAXLEDS];
 extern RF24 myRadio;
 extern byte addresses[6];
 extern int BRIGHTNESS;
@@ -26,11 +27,11 @@ struct package
   int blue;
   int buttonState[8];
   int counter;
-  int switchPinValue;
+ // int switchPinValue;
   int blinkCounterValue;
   int firstMode;
   int thirdMode;
-  int NUM_LEDS;
+  //int NUM_LEDS;
   int BRIGHTNESS;
 };
 

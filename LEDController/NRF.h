@@ -20,15 +20,16 @@ struct package
   int blue;
   int buttonState[8];
   int counter;
-  int switchPinValue;
+ // int switchPinValue;
   int blinkCounterValue = 50;
   int firstMode;
   int thirdMode;
-  int numberOfLEDS;
+  //int numberOfLEDS;
   int BRIGHTNESS;
 
 };
 typedef struct package Package;
+extern Package data;
 
 
 

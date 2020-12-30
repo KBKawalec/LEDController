@@ -22,17 +22,17 @@ void NRFinitialization() {
 void NRFTransmit() {
   myRadio.write(&data, sizeof(data));
 }
-
+int numberOfLEDS = 30;
 void setNRF() {
   data.red = button3 - 7;
   data.green = 8 - button1;
   data.blue = button2;
   data.counter = counter;
-  data.switchPinValue = switchCounter;
+  //data.switchPinValue = switchCounter;
   data.blinkCounterValue = blinkCounter;
   data.firstMode = firstMode;
   data.thirdMode = thirdMode;
- // data.NUM_LEDS = numberOfLEDS;
+  //data.numberOfLEDS = numberOfLEDS;
   data.BRIGHTNESS = BRIGHTNESS;
 
   memcpy(data.buttonState, touchkeys.buttonstate, sizeof(data.buttonState));

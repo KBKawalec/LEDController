@@ -17,8 +17,7 @@ int stripPattern[8];
 int stripColor[8][3];
 
 
-
-CRGB *leds = new CRGB[NUM_LEDS];
+CRGB leds[MAXLEDS];
 Package data;
 
 void setup()
@@ -26,7 +25,7 @@ void setup()
   Serial.begin(9600);
   delay(1000);
 
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, MAXLEDS);
   myRadio.begin();
   myRadio.setChannel(115);
   myRadio.setPALevel(RF24_PA_MAX);
@@ -44,20 +43,23 @@ void interuptFunc() {
       myRadio.read( &data, sizeof(data) );
     }
 
+    Serial.println(BRIGHTNESS);
     //(previousRed !=   data.red || previousGreen !=   data.green || previousBlue !=   data.blue)
     if (  data.blue >= 0 && data.blue < 8 &&  data.red >= 0 && data.red < 8 && data.green >= 0 && data.green < 8) {
       for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
-        if ( data.buttonState[i] == 1) {
-          stripPattern[i] = data.counter;
+        if ( data.buttonState[i] == 1 ) {
+          if (data.counter < 5) {
+            stripPattern[i] = data.counter;
+          }
           stripColor[i][0] = data.red;
           stripColor[i][1] = data.green;
           stripColor[i][2] = data.blue;
 
         }
-        if (data.NUM_LEDS > 0 && data.NUM_LEDS < 3000) {
-          NUM_LEDS = data.NUM_LEDS;
-        }
-        if(data.BRIGHTNESS >= 0 && data.BRIGHTNESS <=255){
+        // if (data.NUM_LEDS > 0 && data.NUM_LEDS < 3000) {
+        // NUM_LEDS = data.NUM_LEDS;
+        // }
+        if (data.BRIGHTNESS >= 0 && data.BRIGHTNESS <= 255) {
           BRIGHTNESS = data.BRIGHTNESS;
         }
 
@@ -92,15 +94,12 @@ void interuptFunc() {
 
   count++;
 }
-int prevNUM_LEDS = NUM_LEDS;
+
 void loop()
 {
-  if (prevNUM_LEDS != NUM_LEDS) {
-    delete [] leds;
-    *leds = new CRGB[NUM_LEDS];
 
-  }
   int ledStripLengthBufferBeg =  0;
+
 
 
   for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
@@ -178,9 +177,27 @@ void loop()
     }
   }
 }
-
+DEFINE_GRADIENT_PALETTE( heatmap_gp ) {
+  0,     0,  0,  0,   //black
+60,   255,  0,  0,   //red
+120,   255,255,  0,   //bright yellow
+180,   0,0,0 };
 void staticLEDS(int i) {
-  paintLEDS(i);
+  for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
+       CRGBPalette16 gPal = CRGBPalette16( CRGB (stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7),
+       CRGB (stripColor[i][2] * BRIGHTNESS / 7 , stripColor[i][0] * BRIGHTNESS / 7, stripColor[i][1] * BRIGHTNESS / 7),
+        CRGB (stripColor[i][1] * BRIGHTNESS / 7 , stripColor[i][2] * BRIGHTNESS / 7, stripColor[i][0] * BRIGHTNESS / 7));
+    //    CRGB (stripColor[i][1] * BRIGHTNESS / 7 , stripColor[i][2] * BRIGHTNESS / 7, stripColor[i][0] * BRIGHTNESS / 7),
+    //    CRGB (stripColor[i][2] * BRIGHTNESS / 7 , stripColor[i][0] * BRIGHTNESS / 7, stripColor[i][1] * BRIGHTNESS / 7));
+    //    CRGBPalette16 gPal = CRGBPalette16( CRGB::Black, CRGB::Red, CRGB::Yellow);
+    //    //byte colorindex = random8(0, 255);
+    //    CRGB color = ColorFromPalette( gPal, 256/(j+2));
+    //    Serial.println(256/(j+2));
+    CRGBPalette16 myPal = heatmap_gp;
+    uint8_t heatindex = (j * 255 / 29);
+    leds[j] = ColorFromPalette( gPal, heatindex);
+    //leds[j] = color;
+  }
   FastLED.show();
 }
 
