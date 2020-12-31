@@ -20,10 +20,8 @@ struct package
   byte blue;
   byte buttonState[8];
   byte counter;
- // int switchPinValue;
   byte blinkCounterValue = 50;
   byte firstMode;
-  byte thirdMode;
   //int numberOfLEDS;
   byte BRIGHTNESS;
 

@@ -14,7 +14,7 @@ unsigned int keys;
 unsigned int keys2;
 byte BRIGHTNESS = 255;
 
-byte LEDvalues[8] = {4, 5, 6, 7, 3, 2, 1, 0};
+byte LEDvalues[8] = {4, 5, 6, 7, 0, 1,2, 3};
 Touchkeys touchkeys;
 
 byte blinkCounter = 50;
@@ -168,7 +168,7 @@ unsigned int GetKeys1()
   return keys2;
 }
 
-int capactiveValues[8] = {65279, 65407, 65471, 65503, 65519, 65527, 65531, 65533};
+int capactiveValues[8] = {65279, 65407, 65471, 65503,65533,65531,65527, 65519};
 unsigned int touchpadkey;
 void getTouchpad() {
   touchpadkey = GetKeys1();
@@ -188,11 +188,12 @@ void getTouchpad() {
 
 }
 unsigned long new_time3 = millis();
+int capactiveValues3[8] = {65279, 65407, 65471, 65503,65519,65527,65531};
 unsigned int slider3;
 void getSlider3() {
   slider3 = GetKeys2();
   for (int i = 6; i >= 0 ; i--) {
-    if (slider3 == capactiveValues[i]) {
+    if (slider3 == capactiveValues3[i]) {
       if (  i == 0 ) {
 
         if ( (millis() - new_time3 > 400 ) ) {

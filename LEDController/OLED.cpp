@@ -27,10 +27,10 @@ void displayOLED() {
   switch (counter) {
     case 1 :
       if (firstMode == 0) {
-        oled.println(F("Color"));
+        oled.println(F("Gradient"));
       }
       else {
-        oled.println(F("Behaviour"));
+        oled.println(F("Rainbow"));
 
       }
 

@@ -28,10 +28,8 @@ void setNRF() {
   data.green = 8 - button1;
   data.blue = button2;
   data.counter = counter;
-  //data.switchPinValue = switchCounter;
   data.blinkCounterValue = blinkCounter;
   data.firstMode = firstMode;
-  data.thirdMode = thirdMode;
   //data.numberOfLEDS = numberOfLEDS;
   data.BRIGHTNESS = BRIGHTNESS;
 

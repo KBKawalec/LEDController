@@ -27,10 +27,8 @@ struct package
   byte blue;
   byte buttonState[8];
   byte counter;
- // int switchPinValue;
   byte blinkCounterValue;
   byte firstMode;
-  byte thirdMode;
   //int NUM_LEDS;
   byte BRIGHTNESS;
 };
