@@ -15,17 +15,17 @@ extern void NRFinitialization();
 
 struct package
 {
-  int red;
-  int green;
-  int blue;
-  int buttonState[8];
-  int counter;
+  byte red;
+  byte green;
+  byte blue;
+  byte buttonState[8];
+  byte counter;
  // int switchPinValue;
-  int blinkCounterValue = 50;
-  int firstMode;
-  int thirdMode;
+  byte blinkCounterValue = 50;
+  byte firstMode;
+  byte thirdMode;
   //int numberOfLEDS;
-  int BRIGHTNESS;
+  byte BRIGHTNESS;
 
 };
 typedef struct package Package;

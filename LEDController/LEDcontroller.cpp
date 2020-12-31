@@ -6,22 +6,20 @@
 
 
 CRGB leds[NUM_LEDS];
-int button1 = 8; // So that it starts out off
-int button2;
-int button3 = 7;
-int button4;
+byte button1 = 8; // So that it starts out off
+byte button2;
+byte button3 = 7;
+byte button4;
 unsigned int keys;
 unsigned int keys2;
-int BRIGHTNESS = 255;
+byte BRIGHTNESS = 255;
 
-
-
-int LEDvalues[8] = {4, 5, 6, 7, 3, 2, 1, 0};
+byte LEDvalues[8] = {4, 5, 6, 7, 3, 2, 1, 0};
 Touchkeys touchkeys;
 
-int blinkCounter = 50;
+byte blinkCounter = 50;
 
-int switchCounter;
+byte switchCounter;
 unsigned long int lastSwitch;
 
 
@@ -87,10 +85,6 @@ void initialize() {
   OLEDInitialize(); // initialization of parameters for OLED
 
 
-
-
-
-
   pinMode (outputA, INPUT);
   delayMicroseconds(10);
   pinMode (outputB, INPUT);
@@ -101,11 +95,6 @@ void initialize() {
   delayMicroseconds(10);
   digitalWrite (switchPin, HIGH);
   switchCounter = 1;
-
-
-
-
-
 
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   for (int i = 0; i < 8; i++) {
@@ -200,7 +189,6 @@ void getTouchpad() {
 }
 unsigned long new_time3 = millis();
 unsigned int slider3;
-bool pressed3 = false;
 void getSlider3() {
   slider3 = GetKeys2();
   for (int i = 6; i >= 0 ; i--) {
@@ -232,7 +220,6 @@ void getSlider3() {
 int capactiveValues2[7] = {32767, 49151, 57343, 61439, 63487, 64511, 65023};
 unsigned long new_time1 = millis();
 unsigned int slider2;
-bool pressed = false;
 void getSlider2() {
   slider2 = GetKeys2();
   for (int i = 6; i >= 0 ; i--) {
@@ -259,18 +246,12 @@ void getSlider2() {
       }
       break;
 
-
     }
-
-
-
-
   }
 }
 
 unsigned long new_time2 = millis();
 unsigned int slider1;
-bool pressed2 = false;
 void getSlider1() {
   slider1 = GetKeys1();
   for (int i = 6; i >= 0 ; i--) {
@@ -295,8 +276,6 @@ void getSlider1() {
         button2 = i + 1;
       }
       break;
-
-
     }
   }
 }

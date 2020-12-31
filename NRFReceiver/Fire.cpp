@@ -1,4 +1,5 @@
 #include "Fire.h"
+#include "NRFReceiver.h"
 
 CRGBPalette16 gPal;
 bool gReverseDirection = false;

@@ -7,21 +7,22 @@
 
 int LEDstripLength = NUM_LEDS;
 int segment = LEDstripLength / 8;
-int previousRed;
-int previousGreen;
-int previousBlue;
-int previousButtonState[8];
+byte previousRed;
+byte previousGreen;
+byte previousBlue;
+byte previousButtonState[8];
 
 int count;
-int stripPattern[8];
-int stripColor[8][3];
+byte stripPattern[8];
+byte stripColor[8][3];
 
 
-CRGB leds[MAXLEDS];
 Package data;
-
+CRGB leds[MAXLEDS];
 void setup()
 {
+  
+  
   Serial.begin(9600);
   delay(1000);
 
@@ -155,7 +156,7 @@ void loop()
 
   for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
     if (stripPattern[i] == 3 || stripPattern[i] == 4) {
-      delay(data.blinkCounterValue);
+      delay(data.blinkCounterValue / 2);
       break;
     }
   }
@@ -179,14 +180,15 @@ void loop()
 }
 DEFINE_GRADIENT_PALETTE( heatmap_gp ) {
   0,     0,  0,  0,   //black
-60,   255,  0,  0,   //red
-120,   255,255,  0,   //bright yellow
-180,   0,0,0 };
+  60,   255,  0,  0,   //red
+  120,   255, 255,  0,  //bright yellow
+  180,   0, 0, 0
+};
 void staticLEDS(int i) {
   for (int j = LEDstripLength * i / 8; j < LEDstripLength  * (i + 1) / 8; j++) {
-       CRGBPalette16 gPal = CRGBPalette16( CRGB (stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7),
-       CRGB (stripColor[i][2] * BRIGHTNESS / 7 , stripColor[i][0] * BRIGHTNESS / 7, stripColor[i][1] * BRIGHTNESS / 7),
-        CRGB (stripColor[i][1] * BRIGHTNESS / 7 , stripColor[i][2] * BRIGHTNESS / 7, stripColor[i][0] * BRIGHTNESS / 7));
+    CRGBPalette16 gPal = CRGBPalette16( CRGB (stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7),
+                                        CRGB (stripColor[i][2] * BRIGHTNESS / 7 , stripColor[i][0] * BRIGHTNESS / 7, stripColor[i][1] * BRIGHTNESS / 7),
+                                        CRGB (stripColor[i][1] * BRIGHTNESS / 7 , stripColor[i][2] * BRIGHTNESS / 7, stripColor[i][0] * BRIGHTNESS / 7));
     //    CRGB (stripColor[i][1] * BRIGHTNESS / 7 , stripColor[i][2] * BRIGHTNESS / 7, stripColor[i][0] * BRIGHTNESS / 7),
     //    CRGB (stripColor[i][2] * BRIGHTNESS / 7 , stripColor[i][0] * BRIGHTNESS / 7, stripColor[i][1] * BRIGHTNESS / 7));
     //    CRGBPalette16 gPal = CRGBPalette16( CRGB::Black, CRGB::Red, CRGB::Yellow);

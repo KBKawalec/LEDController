@@ -5,9 +5,9 @@
 
 extern void updatea();
 
-extern int firstMode;
-extern int thirdMode;
-extern int fifthMode;
+extern byte firstMode;
+extern byte thirdMode;
+extern byte fifthMode;
 
 
 

@@ -12,10 +12,10 @@ void setup() {
 
 
 }
-int tempCount = counter;
-int tempSwitchCount = switchCounter;
-int tempBlinkCounter = blinkCounter;
-int BRIGHTNESSFlag = BRIGHTNESS;
+byte tempCount = counter;
+byte tempSwitchCount = switchCounter;
+byte tempBlinkCounter = blinkCounter;
+byte BRIGHTNESSFlag = BRIGHTNESS;
 void loop() {
   
   

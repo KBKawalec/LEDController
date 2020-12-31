@@ -16,23 +16,23 @@ extern int NUM_LEDS;
 extern CRGB leds[MAXLEDS];
 extern RF24 myRadio;
 extern byte addresses[6];
-extern int BRIGHTNESS;
+extern byte BRIGHTNESS;
 
 
 
 struct package
 {
-  int red;
-  int green;
-  int blue;
-  int buttonState[8];
-  int counter;
+  byte red;
+  byte green;
+  byte blue;
+  byte buttonState[8];
+  byte counter;
  // int switchPinValue;
-  int blinkCounterValue;
-  int firstMode;
-  int thirdMode;
+  byte blinkCounterValue;
+  byte firstMode;
+  byte thirdMode;
   //int NUM_LEDS;
-  int BRIGHTNESS;
+  byte BRIGHTNESS;
 };
 
 typedef struct package Package;

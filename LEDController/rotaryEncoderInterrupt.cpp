@@ -5,18 +5,18 @@
 
 #define UPPPERLIMITOFOPTIONS  5
 
-int counter = 1;
+byte counter = 1;
 
 int whichMode[UPPPERLIMITOFOPTIONS];
 
-int fifthMode;
-int thirdMode;
-int firstMode;
+byte fifthMode;
+byte thirdMode;
+byte firstMode;
 
-int pinAstateCurrent = LOW;                // Current state of Pin A
-int pinAStateLast = pinAstateCurrent;
+byte pinAstateCurrent = LOW;                // Current state of Pin A
+byte pinAStateLast = pinAstateCurrent;
 
-int previousState;
+byte previousState;
 
 void updatea() {
 
