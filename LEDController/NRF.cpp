@@ -28,11 +28,7 @@ void setNRF() {
   data.green = 8 - button1;
   data.blue = button2;
   data.counter = counter;
-  data.blinkCounterValue = blinkCounter;
-  data.firstMode = firstMode;
-  //data.numberOfLEDS = numberOfLEDS;
-  data.BRIGHTNESS = BRIGHTNESS;
-
+  memcpy(data.modeCounter, modeCounter, sizeof(data.modeCounter));
   memcpy(data.buttonState, touchkeys.buttonstate, sizeof(data.buttonState));
 
 }

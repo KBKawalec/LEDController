@@ -2,10 +2,7 @@
 #define _NRF_H
 #include <Arduino.h>
 
-
-
-//Package data;
-
+#include "rotaryEncoderInterrupt.h"
 
 //NRF
 
@@ -20,10 +17,7 @@ struct package
   byte blue;
   byte buttonState[8];
   byte counter;
-  byte blinkCounterValue = 50;
-  byte firstMode;
-  //int numberOfLEDS;
-  byte BRIGHTNESS;
+  byte modeCounter[UPPPERLIMITOFOPTIONS];
 
 };
 typedef struct package Package;

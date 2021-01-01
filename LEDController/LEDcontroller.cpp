@@ -12,61 +12,9 @@ byte button3 = 7;
 byte button4;
 unsigned int keys;
 unsigned int keys2;
-byte BRIGHTNESS = 255;
 
 byte LEDvalues[8] = {4, 5, 6, 7, 0, 1,2, 3};
 Touchkeys touchkeys;
-
-byte blinkCounter = 50;
-
-byte switchCounter;
-unsigned long int lastSwitch;
-
-
-void updateSwitch() {
-  if (millis() - lastSwitch > 200) {
-    switchCounter = ( switchCounter + 1 ) % 2;
-    // firstMode = 0;
-
-    switch (counter) {
-      case 1 :
-        thirdMode = 0;
-        firstMode = ( firstMode + 1 ) % 2;
-        fifthMode = 0;
-
-
-
-        break;
-      case 2 :
-        thirdMode = 0;
-        fifthMode = 0;
-
-        break;
-      case 3 :
-        thirdMode = ( thirdMode + 1 ) % 2;
-        fifthMode = 0;
-
-        break;
-      case 4 :
-        thirdMode = 0;
-        fifthMode = 0;
-
-        break;
-      case 5 :
-        thirdMode = 0;
-        fifthMode = ( fifthMode + 1 ) % 2;
-
-        break;
-
-
-    }
-    lastSwitch = millis();
-  }
-}
-
-
-
-
 
 
 void initialize() {
@@ -83,6 +31,7 @@ void initialize() {
   pinMode(LED_PIN, OUTPUT);
 
   OLEDInitialize(); // initialization of parameters for OLED
+  initializeRotaryParamaters();
 
 
   pinMode (outputA, INPUT);
@@ -94,7 +43,7 @@ void initialize() {
   digitalWrite (outputB, HIGH);
   delayMicroseconds(10);
   digitalWrite (switchPin, HIGH);
-  switchCounter = 1;
+  switchCounter = 0;
 
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   for (int i = 0; i < 8; i++) {

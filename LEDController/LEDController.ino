@@ -2,7 +2,7 @@
 #include "LEDController.h"
 #include "NRF.h"
 #include "OLED.h"
-
+#include "rotaryEncoderInterrupt.h"
 
 
 void setup() {
@@ -14,11 +14,12 @@ void setup() {
 }
 byte tempCount = counter;
 byte tempSwitchCount = switchCounter;
-byte tempBlinkCounter = blinkCounter;
-byte BRIGHTNESSFlag = BRIGHTNESS;
+byte tempBlinkCounter = modeCounter[BLINKMODE];
+byte BRIGHTNESSFlag = modeCounter[BRIGHTNESSMODE];
 void loop() {
-  
-  
+
+
+
   unsigned long newt = millis();
   unsigned int tempKeys2 = GetKeys2();
   unsigned int tempKeys1 = GetKeys1();
@@ -44,16 +45,16 @@ void loop() {
     setSlider2();
 
   }
-  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter || BRIGHTNESSFlag != BRIGHTNESS) {
+  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINKMODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESSMODE]) {
     setNRF();
     NRFTransmit();
   }
-  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != blinkCounter || BRIGHTNESSFlag != BRIGHTNESS) {
+  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINKMODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESSMODE]) {
     displayOLED();
     tempCount = counter;
     tempSwitchCount = switchCounter;
-    tempBlinkCounter = blinkCounter;
-    BRIGHTNESSFlag = BRIGHTNESS;
+    tempBlinkCounter = modeCounter[BLINKMODE];
+    BRIGHTNESSFlag = modeCounter[BRIGHTNESSMODE];
   }
   // Serial.println(millis() - newt);
   for (int i = 0; i < 8; i++) {

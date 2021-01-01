@@ -7,7 +7,9 @@
 #include "RF24.h"
 #include <FastLED.h>
 
-
+#define UPPPERLIMITOFOPTIONS  6
+#define BLINKMODE 2
+#define BRIGHTNESSMODE 5
 #define LED_PIN     2
 #define MAXLEDS 200
 
@@ -27,10 +29,7 @@ struct package
   byte blue;
   byte buttonState[8];
   byte counter;
-  byte blinkCounterValue;
-  byte firstMode;
-  //int NUM_LEDS;
-  byte BRIGHTNESS;
+  byte modeCounter[UPPPERLIMITOFOPTIONS];
 };
 
 typedef struct package Package;

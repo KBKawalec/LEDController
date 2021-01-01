@@ -12,9 +12,9 @@ byte previousGreen;
 byte previousBlue;
 byte previousButtonState[8];
 
-int count;
 byte stripPattern[8];
 byte stripColor[8][3];
+byte delayAmount;
 
 
 Package data;
@@ -49,8 +49,8 @@ void interuptFunc() {
     if (  data.blue >= 0 && data.blue < 8 &&  data.red >= 0 && data.red < 8 && data.green >= 0 && data.green < 8) {
       for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
         if ( data.buttonState[i] == 1 ) {
-          if (data.counter < 5) {
-            stripPattern[i] = data.counter;
+          if (data.counter < UPPPERLIMITOFOPTIONS) {
+            stripPattern[i] = data.counter + 1;
           }
           stripColor[i][0] = data.red;
           stripColor[i][1] = data.green;
@@ -60,32 +60,16 @@ void interuptFunc() {
         // if (data.NUM_LEDS > 0 && data.NUM_LEDS < 3000) {
         // NUM_LEDS = data.NUM_LEDS;
         // }
-        if (data.BRIGHTNESS >= 0 && data.BRIGHTNESS <= 255) {
-          BRIGHTNESS = data.BRIGHTNESS;
+        if (data.modeCounter[BRIGHTNESSMODE] >= 0 && data.modeCounter[BRIGHTNESSMODE] <= 255) {
+          BRIGHTNESS = data.modeCounter[BRIGHTNESSMODE];
         }
+        delayAmount = data.modeCounter[BLINKMODE];
 
       }
-      //      else {
-      //        previousRed = data.red;
-      //        previousGreen = data.green;
-      //        previousBlue = data.blue;
-      //      }
 
-      //
-      // Serial.println("packet recieved");
-      //      Serial.println(previousGreen);
-      //      Serial.println(previousBlue);
       previousRed = data.red;
       previousGreen = data.green;
       previousBlue = data.blue;
-      //      Serial.println(previousRed);
-      //      Serial.println(previousGreen);
-      //      Serial.println(previousBlue);
-      //      Serial.println("----------------------");
-
-
-
-
 
 
 
@@ -93,7 +77,6 @@ void interuptFunc() {
   }
 
 
-  count++;
 }
 
 void loop()
@@ -131,12 +114,10 @@ void loop()
               break;
             }
           } // For each time the chain is broken we call the function so that there can be unconnected segments
-          if (data.firstMode == 0) {
-            gradientLEDS(stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7, ledStripLengthBufferBeg, LEDstripLength  * (i + 1) / 8);
-          }
-          else {
-            rainbowLEDS(stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7, ledStripLengthBufferBeg, LEDstripLength  * (i + 1) / 8);
-          }
+
+
+          rainbowLEDS(stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7, ledStripLengthBufferBeg, LEDstripLength  * (i + 1) / 8);
+
 
 
         }
@@ -178,6 +159,31 @@ void loop()
         }
 
         break;
+      case 5:
+        if (i != sizeof(data.buttonState) / sizeof(data.buttonState[0]) - 1 && stripPattern[i + 1] == 5 && stripColor[i + 1][0] == stripColor[i][0] && stripColor[i + 1][1] == stripColor[i][1] && stripColor[i + 1][2] == stripColor[i][2]) {
+
+          continue; // if this is a chain of connected segments then continue to find the whole chain
+
+
+        }
+        else {
+          for (int j = i; j >= 0 ; j--) {
+            if ( j == 0 ) {
+              ledStripLengthBufferBeg =  0; // If the chain is broken we find the beginning of the chain
+            }
+            else if (stripPattern[j - 1] == 5 && stripColor[j - 1][0] == stripColor[j][0] && stripColor[j - 1][1] == stripColor[j][1] && stripColor[j - 1][2] == stripColor[j][2]) {
+              continue;
+
+            }
+            else {
+              ledStripLengthBufferBeg =  LEDstripLength * j / 8;// If the chain is broken we find the beginning of the chain
+              break;
+            }
+          } // For each time the chain is broken we call the function so that there can be unconnected segments
+
+          gradientLEDS(stripColor[i][0] * BRIGHTNESS / 7 , stripColor[i][1] * BRIGHTNESS / 7, stripColor[i][2] * BRIGHTNESS / 7, ledStripLengthBufferBeg, LEDstripLength  * (i + 1) / 8);
+        }
+        break;
 
 
 
@@ -188,7 +194,7 @@ void loop()
 
   for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
     if (stripPattern[i] == 3 || stripPattern[i] == 4) {
-      delay(data.blinkCounterValue / 2);
+      delay(delayAmount / 2);
       break;
     }
   }
@@ -205,7 +211,7 @@ void loop()
   FastLED.show();
   for (int i = 0; i < sizeof(data.buttonState) / sizeof(data.buttonState[0]); i++) {
     if (stripPattern[i] == 3) {
-      delay(data.blinkCounterValue);
+      delay(delayAmount / 2);
       break;
     }
   }
@@ -238,9 +244,11 @@ void gradientLEDS(int red, int green, int blue, int beginningStrip, int endStrip
 }
 void rainbowLEDS(int red, int green, int blue, int beginningStrip, int endStrip) {
   for (int j = beginningStrip; j < endStrip; j++) {
-    CRGBPalette16 gPal = CRGBPalette16( CRGB (red, green, blue),
-                                        CRGB (blue,red,green),
-                                        CRGB (green, blue, red));
+    CRGBPalette16 gPal = CRGBPalette16(
+                           CRGB ((red + blue) / 2, (green + red) / 2, (green + blue) / 2),
+                           CRGB (red, green, blue),
+                           CRGB ((green + red) / 2, (blue + green) / 2, (red + blue) / 2));
+
     //    CRGB (stripColor[i][1] * BRIGHTNESS / 7 , stripColor[i][2] * BRIGHTNESS / 7, stripColor[i][0] * BRIGHTNESS / 7),
     //    CRGB (stripColor[i][2] * BRIGHTNESS / 7 , stripColor[i][0] * BRIGHTNESS / 7, stripColor[i][1] * BRIGHTNESS / 7));
     //    CRGBPalette16 gPal = CRGBPalette16( CRGB::Black, CRGB::Red, CRGB::Yellow);
@@ -273,3 +281,9 @@ void paintLEDS(int i) {
 
   }
 }
+
+
+//Add this Pastel
+// CRGBPalette16 gPal = CRGBPalette16( CRGB (red, green, blue),
+//                                        CRGB (blue,red,green),
+//                                        CRGB (green, blue, red));

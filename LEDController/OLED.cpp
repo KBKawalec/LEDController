@@ -3,7 +3,19 @@
 #include "rotaryEncoderInterrupt.h"
 SSD1306AsciiWire oled;
 
+//const char OLEDMessages[UPPPERLIMITOFOPTIONS][2] PROGMEM = {{, "Rainbow"}, {"Dynamic"}, {"Blink"}, {"Candle Light"}, {"Brightness"}};
 
+
+const char string_1[] PROGMEM = "Rainbow";
+const char string_2[] PROGMEM = "Dynamic";
+const char string_3[] PROGMEM = "Blink";
+const char string_4[] PROGMEM = "Candle Light";
+const char string_5[] PROGMEM = "Gradient";
+const char string_6[] PROGMEM = "Brightness";
+char buffer[30]; // buffer for reading the string to (needs to be large enough to take the longest string
+
+// Initialize Table of Strings
+const char* const string_table[] PROGMEM = { string_1, string_2, string_3, string_4, string_5,string_6 };
 
 void OLEDInitialize() {
   Wire.begin();
@@ -23,46 +35,21 @@ void displayOLED() {
   oled.clear();
   oled.setCursor(0, 4);
   oled.set2X();
-
-  switch (counter) {
-    case 1 :
-      if (firstMode == 0) {
-        oled.println(F("Gradient"));
+  for (int i = 0; i < UPPPERLIMITOFOPTIONS; i++) {
+    if (counter == i) {
+      if (whichMode[i] == 0) {
+        strcpy_P(buffer, (char*)pgm_read_dword(&(string_table[i])));
+        oled.println(buffer);
       }
-      else {
-        oled.println(F("Rainbow"));
-
+      else if (i == BLINKMODE || i == BRIGHTNESSMODE) {
+        oled.println(modeCounter[i]);
       }
-
-
-      break;
-    case 2 :
-      oled.println(F("Dynamic"));
-      break;
-    case 3 :
-      if (thirdMode == 0) {
-        oled.println(F("Blink"));
-      }
-      else {
-        oled.println(blinkCounter);
-
-      }
-      break;
-    case 4 :
-      oled.println(F("Candle"));
-      oled.println(F("light"));
-      break;
-    case 5 :
-      if (fifthMode == 0) {
-        oled.println(F("Brightness"));
-      }
-      else {
-        oled.println(BRIGHTNESS);
-
+      else{
+        oled.println("TODO");
       }
 
-
-      break;
+    }
 
   }
+
 }

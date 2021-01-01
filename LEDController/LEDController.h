@@ -20,10 +20,7 @@
 #define CLOCK2 8
 #define LED_PIN     9
 #define NUM_LEDS    29
-#define DELAY_TIME 100
-#define MAXBRIGHT 100
 
-extern byte BRIGHTNESS;
 
 
 // initializs pins and values
@@ -38,13 +35,7 @@ extern void getSlider2();
 extern void getSlider1();
 extern void getTouchpad();
 
-//Used to show current option on LCD
-extern void showDisplay();
-extern void displayOLED();
 
-//Triggers a rotary encoder movement
-extern void triggerRotary();
-extern void setRotary();
 
 // Resets to black and then sets the value of the slider to the LED light
 extern void resetLEDS();
@@ -74,14 +65,6 @@ struct Touchkeys {
   
 };
 extern Touchkeys touchkeys;
-
-
-
-
-//Used for the rotary encoder and to keep track of the current value (counter) 
-extern byte counter;
-extern byte switchCounter;
-extern byte blinkCounter;
 
 
 #endif
