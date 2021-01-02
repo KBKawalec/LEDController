@@ -49,9 +49,7 @@ extern byte button1;
 extern byte button2;
 extern byte button3;
 extern byte button4;
-// used for calculating capactive touchpad
-extern unsigned int keys;
-extern unsigned int keys2;
+
 
 // LED Strip variable
 extern CRGB leds[NUM_LEDS];

@@ -22,7 +22,7 @@ void initializeNRF() {
 void transmitNRF() {
   myRadio.write(&data, sizeof(data));
 }
-int numberOfLEDS = 30;
+
 void setNRF() {
   data.red = button3 - 7;
   data.green = 8 - button1;

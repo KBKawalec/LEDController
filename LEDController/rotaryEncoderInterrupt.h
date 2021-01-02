@@ -3,12 +3,14 @@
 #include <Arduino.h>
 
 
-#define UPPPERLIMITOFOPTIONS  6
+#define UPPPER_LIMIT_OF_OPTIONS  6
 
-#define BLINKMODE 2
-#define BRIGHTNESSMODE 5
+#define BLINK_MODE 2
+#define BRIGHTNESS_MODE 5
 
-#define BRIGHTNESSAMOUNT 10
+#define BRIGHTNESS_AMOUNT 10
+#define BLINK_START 50
+#define BRIGHTNESS_START 255
 
 extern void buttonInterrupt();
 extern void rotaryInterrupt();
@@ -16,8 +18,8 @@ extern void initializeRotaryParamaters();
 //extern byte firstMode;
 //extern byte thirdMode;
 //extern byte fifthMode;
-extern byte whichMode[UPPPERLIMITOFOPTIONS];
-extern byte modeCounter[UPPPERLIMITOFOPTIONS];
+extern byte whichMode[UPPPER_LIMIT_OF_OPTIONS];
+extern byte modeCounter[UPPPER_LIMIT_OF_OPTIONS];
 extern char counter;
 extern byte switchCounter;
 

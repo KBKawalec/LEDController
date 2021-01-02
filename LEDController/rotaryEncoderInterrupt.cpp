@@ -4,8 +4,8 @@
 
 char counter = -1;
 
-byte whichMode[UPPPERLIMITOFOPTIONS];
-byte modeCounter[UPPPERLIMITOFOPTIONS];
+byte whichMode[UPPPER_LIMIT_OF_OPTIONS];
+byte modeCounter[UPPPER_LIMIT_OF_OPTIONS];
 
 
 byte switchCounter;
@@ -17,8 +17,9 @@ byte pinAStateLast = pinAstateCurrent;
 byte previousState;
 
 void initializeRotaryParamaters() {
-  modeCounter[BLINKMODE] = 50;
-  modeCounter[BRIGHTNESSMODE] = 255;
+  modeCounter[BLINK_MODE] = BLINK_START;
+  modeCounter[BRIGHTNESS_MODE] = BRIGHTNESS_START;
+
   pinMode (outputA, INPUT);
   delayMicroseconds(10);
   pinMode (outputB, INPUT);
@@ -28,9 +29,9 @@ void initializeRotaryParamaters() {
   digitalWrite (outputB, HIGH);
   delayMicroseconds(10);
   digitalWrite (switchPin, HIGH);
-  
+
   switchCounter = 0;
-  
+
   attachInterrupt(digitalPinToInterrupt(outputB), rotaryInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(switchPin), buttonInterrupt, FALLING);
 
@@ -38,19 +39,19 @@ void initializeRotaryParamaters() {
 
 void rotaryInterrupt() {
 
-  int tempCounters;
-  for (int i = 0; i < UPPPERLIMITOFOPTIONS; i++) {
-    if (counter == i) {
-      if (whichMode[i] == 0) {
-        tempCounters = counter;
-      }
-      else if (i == BLINKMODE || i == BRIGHTNESSMODE) {
-        tempCounters = modeCounter[i];
-      }
-
-    }
-
-  }
+  int tempCounters = 0;
+  //  for (int i = 0; i < UPPPER_LIMIT_OF_OPTIONS; i++) {
+  //    if (counter == i) {
+  //      if (whichMode[i] == 0) {
+  //        tempCounters = counter;
+  //      }
+  //      else if (i == BLINK_MODE || i == BRIGHTNESS_MODE) {
+  //        tempCounters = modeCounter[i];
+  //      }
+  //
+  //    }
+  //
+  //  }
 
   // ROTATION DIRECTION
   delayMicroseconds(10);
@@ -59,7 +60,7 @@ void rotaryInterrupt() {
   if ((previousState == 1 && pinAStateLast == 1 && pinAstateCurrent == 0
        && digitalRead(outputB) == 1)) {
 
-    if ( counter == BRIGHTNESSMODE && whichMode[BRIGHTNESSMODE]) tempCounters = tempCounters - BRIGHTNESSAMOUNT;
+    if ( counter == BRIGHTNESS_MODE && whichMode[BRIGHTNESS_MODE]) tempCounters = tempCounters - BRIGHTNESS_AMOUNT;
     else tempCounters--;
     previousState = 0;
 
@@ -70,12 +71,12 @@ void rotaryInterrupt() {
   if ((pinAStateLast == LOW) && (pinAstateCurrent == HIGH)) {
 
     if (digitalRead(outputB) == HIGH) {      // If Pin B is HIGH
-      if ( counter == BRIGHTNESSMODE && whichMode[BRIGHTNESSMODE]) tempCounters = tempCounters + BRIGHTNESSAMOUNT;
+      if ( counter == BRIGHTNESS_MODE && whichMode[BRIGHTNESS_MODE]) tempCounters = tempCounters + BRIGHTNESS_AMOUNT;
       else tempCounters++;
       previousState = 1;
     }
     else {
-      if ( counter == BRIGHTNESSMODE && whichMode[BRIGHTNESSMODE]) tempCounters = tempCounters - BRIGHTNESSAMOUNT;
+      if ( counter == BRIGHTNESS_MODE && whichMode[BRIGHTNESS_MODE]) tempCounters = tempCounters - BRIGHTNESS_AMOUNT;
       else tempCounters--;
       previousState = 0;
     }
@@ -84,13 +85,15 @@ void rotaryInterrupt() {
 
   pinAStateLast = pinAstateCurrent;        // Store the latest read value in the currect state variable
 
-  for (int i = 0; i < UPPPERLIMITOFOPTIONS; i++) {
+  for (int i = 0; i < UPPPER_LIMIT_OF_OPTIONS; i++) {
     if (counter == i) {
       if (whichMode[i] == 0) {
-        counter = tempCounters;
+        counter = counter + tempCounters;
       }
-      else {
-        if (modeCounter[i] <= 255 && modeCounter[i] >= 0)modeCounter[i] = tempCounters;
+      else if (i == BLINK_MODE || i == BRIGHTNESS_MODE) {
+        modeCounter[i] = modeCounter[i] + tempCounters;
+        if (modeCounter[i] > 255 )  modeCounter[i] = 255;
+        else if (modeCounter[i] < 0) modeCounter[i] = 0;
 
       }
 
@@ -98,20 +101,18 @@ void rotaryInterrupt() {
 
   }
 
-  if (counter < 0) counter = UPPPERLIMITOFOPTIONS - 1;
+  if (counter < 0) counter = UPPPER_LIMIT_OF_OPTIONS - 1;
 
-  else if (counter > UPPPERLIMITOFOPTIONS - 1)  counter = 0;
+  else if(counter > UPPPER_LIMIT_OF_OPTIONS - 1)  counter = 0;
 
 }
-
-
 
 
 void buttonInterrupt() {
   if (millis() - lastSwitch > 200) {
     switchCounter = ( switchCounter + 1 ) % 2;
     // firstMode = 0;
-    for (int i = 0; i < UPPPERLIMITOFOPTIONS; i++) {
+    for (int i = 0; i < UPPPER_LIMIT_OF_OPTIONS; i++) {
       if (counter == i) {
         whichMode[i] = (whichMode[i] + 1) % 2;
       }

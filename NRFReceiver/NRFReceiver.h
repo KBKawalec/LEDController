@@ -14,7 +14,7 @@
 #define MAXLEDS 200
 
 
-extern int NUM_LEDS;
+  extern int NUM_LEDS;
 extern CRGB leds[MAXLEDS];
 extern RF24 myRadio;
 extern byte addresses[6];

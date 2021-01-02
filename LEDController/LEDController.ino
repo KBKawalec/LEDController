@@ -6,8 +6,8 @@
 
 byte tempCount = counter;
 byte tempSwitchCount = switchCounter;
-byte tempBlinkCounter = modeCounter[BLINKMODE];
-byte BRIGHTNESSFlag = modeCounter[BRIGHTNESSMODE];
+byte tempBlinkCounter = modeCounter[BLINK_MODE];
+byte BRIGHTNESSFlag = modeCounter[BRIGHTNESS_MODE];
 
 
 void setup() {
@@ -43,16 +43,16 @@ void loop() {
     setSlider2();
 
   }
-  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINKMODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESSMODE]) {
+  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINK_MODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESS_MODE]) {
     setNRF();
     transmitNRF();
   }
-  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINKMODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESSMODE]) {
+  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINK_MODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESS_MODE]) {
     displayOLED();
     tempCount = counter;
     tempSwitchCount = switchCounter;
-    tempBlinkCounter = modeCounter[BLINKMODE];
-    BRIGHTNESSFlag = modeCounter[BRIGHTNESSMODE];
+    tempBlinkCounter = modeCounter[BLINK_MODE];
+    BRIGHTNESSFlag = modeCounter[BRIGHTNESS_MODE];
   }
   
   setTouchPad();

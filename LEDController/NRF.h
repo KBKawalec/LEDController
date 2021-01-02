@@ -17,7 +17,7 @@ struct package
   byte blue;
   byte buttonState[8];
   byte counter;
-  byte modeCounter[UPPPERLIMITOFOPTIONS];
+  byte modeCounter[UPPPER_LIMIT_OF_OPTIONS];
 
 };
 typedef struct package Package;

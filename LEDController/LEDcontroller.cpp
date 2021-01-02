@@ -19,7 +19,7 @@ Touchkeys touchkeys;
 
 void initialize() {
 
-
+  //Capactive touchpad initialization
   pinMode(KEYS, INPUT);
   delayMicroseconds(10);
   pinMode(CLOCK, OUTPUT);
@@ -28,6 +28,7 @@ void initialize() {
   delayMicroseconds(10);
   pinMode(CLOCK2, OUTPUT);
   delayMicroseconds(10);
+  //LED lights pin
   pinMode(LED_PIN, OUTPUT);
 
   initializeOLED(); // initialization of parameters for OLED
@@ -35,7 +36,7 @@ void initialize() {
 
 
 
-
+ //initial state of touchpad
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   for (int i = 0; i < 8; i++) {
 
