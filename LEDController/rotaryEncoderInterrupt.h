@@ -10,8 +10,8 @@
 
 #define BRIGHTNESSAMOUNT 10
 
-extern void updatea();
-extern void updateSwitch();
+extern void buttonInterrupt();
+extern void rotaryInterrupt();
 extern void initializeRotaryParamaters();
 //extern byte firstMode;
 //extern byte thirdMode;

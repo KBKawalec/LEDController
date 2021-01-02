@@ -17,7 +17,7 @@ char buffer[30]; // buffer for reading the string to (needs to be large enough t
 // Initialize Table of Strings
 const char* const string_table[] PROGMEM = { string_1, string_2, string_3, string_4, string_5,string_6 };
 
-void OLEDInitialize() {
+void initializeOLED() {
   Wire.begin();
   Wire.setClock(400000L);
 

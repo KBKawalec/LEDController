@@ -42,6 +42,7 @@ extern void resetLEDS();
 extern void setSlider1();
 extern void setSlider2();
 extern void setSlider3();
+extern void setTouchPad();
 
 //Global value to hold current value for each slider and for touchpad
 extern byte button1;

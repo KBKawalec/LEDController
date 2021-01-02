@@ -4,18 +4,20 @@
 #include "OLED.h"
 #include "rotaryEncoderInterrupt.h"
 
-
-void setup() {
-  Serial.begin(9600);
-  initialize();
-  delay(1000);
-
-
-}
 byte tempCount = counter;
 byte tempSwitchCount = switchCounter;
 byte tempBlinkCounter = modeCounter[BLINKMODE];
 byte BRIGHTNESSFlag = modeCounter[BRIGHTNESSMODE];
+
+
+void setup() {
+  Serial.begin(9600);
+  initialize();
+  delay(100);
+
+
+}
+
 void loop() {
 
 
@@ -23,10 +25,6 @@ void loop() {
   unsigned long newt = millis();
   unsigned int tempKeys2 = GetKeys2();
   unsigned int tempKeys1 = GetKeys1();
-  //  Serial.print(counter);
-  //  Serial.print(blinkCounter);
-
-
 
 
   if (tempKeys2 <= 65533) {
@@ -47,7 +45,7 @@ void loop() {
   }
   if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINKMODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESSMODE]) {
     setNRF();
-    NRFTransmit();
+    transmitNRF();
   }
   if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINKMODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESSMODE]) {
     displayOLED();
@@ -56,16 +54,8 @@ void loop() {
     tempBlinkCounter = modeCounter[BLINKMODE];
     BRIGHTNESSFlag = modeCounter[BRIGHTNESSMODE];
   }
-  // Serial.println(millis() - newt);
-  for (int i = 0; i < 8; i++) {
-    if (touchkeys.buttonstate[i] == 1) {
-
-      leds[touchkeys.LEDNum[i]] = CRGB(0, 255, 200);
-    }
-    else {
-      leds[touchkeys.LEDNum[i]] = CRGB(255, 200, 0);
-    }
-  }
+  
+  setTouchPad();
   FastLED.show();
 
   //  Serial.println(millis() - newt);

@@ -14,7 +14,7 @@
 // Define proper RST_PIN if required.
 #define RST_PIN -1
 
-extern void OLEDInitialize();
+extern void initializeOLED();
 extern void displayOLED();
 
 

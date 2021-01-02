@@ -6,9 +6,9 @@
 
 //NRF
 
-extern void NRFTransmit();
+extern void transmitNRF();
 extern void setNRF();
-extern void NRFinitialization();
+extern void initializeNRF();
 
 struct package
 {

@@ -15,13 +15,28 @@ byte pinAstateCurrent = LOW;                // Current state of Pin A
 byte pinAStateLast = pinAstateCurrent;
 
 byte previousState;
+
 void initializeRotaryParamaters() {
   modeCounter[BLINKMODE] = 50;
   modeCounter[BRIGHTNESSMODE] = 255;
+  pinMode (outputA, INPUT);
+  delayMicroseconds(10);
+  pinMode (outputB, INPUT);
+  delayMicroseconds(10);
+  digitalWrite (outputA, HIGH);
+  delayMicroseconds(10);
+  digitalWrite (outputB, HIGH);
+  delayMicroseconds(10);
+  digitalWrite (switchPin, HIGH);
+  
+  switchCounter = 0;
+  
+  attachInterrupt(digitalPinToInterrupt(outputB), rotaryInterrupt, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(switchPin), buttonInterrupt, FALLING);
+
 }
 
-void updatea() {
-
+void rotaryInterrupt() {
 
   int tempCounters;
   for (int i = 0; i < UPPPERLIMITOFOPTIONS; i++) {
@@ -36,7 +51,6 @@ void updatea() {
     }
 
   }
-
 
   // ROTATION DIRECTION
   delayMicroseconds(10);
@@ -93,7 +107,7 @@ void updatea() {
 
 
 
-void updateSwitch() {
+void buttonInterrupt() {
   if (millis() - lastSwitch > 200) {
     switchCounter = ( switchCounter + 1 ) % 2;
     // firstMode = 0;

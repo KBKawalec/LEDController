@@ -13,7 +13,7 @@ byte button4;
 unsigned int keys;
 unsigned int keys2;
 
-byte LEDvalues[8] = {4, 5, 6, 7, 0, 1,2, 3};
+byte LEDvalues[8] = {4, 5, 6, 7, 0, 1, 2, 3};
 Touchkeys touchkeys;
 
 
@@ -30,20 +30,11 @@ void initialize() {
   delayMicroseconds(10);
   pinMode(LED_PIN, OUTPUT);
 
-  OLEDInitialize(); // initialization of parameters for OLED
+  initializeOLED(); // initialization of parameters for OLED
   initializeRotaryParamaters();
 
 
-  pinMode (outputA, INPUT);
-  delayMicroseconds(10);
-  pinMode (outputB, INPUT);
-  delayMicroseconds(10);
-  digitalWrite (outputA, HIGH);
-  delayMicroseconds(10);
-  digitalWrite (outputB, HIGH);
-  delayMicroseconds(10);
-  digitalWrite (switchPin, HIGH);
-  switchCounter = 0;
+
 
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   for (int i = 0; i < 8; i++) {
@@ -59,10 +50,9 @@ void initialize() {
 
 
   //Initialzing the NRF
-  NRFinitialization();
+  initializeNRF();
 
-  attachInterrupt(digitalPinToInterrupt(outputB), updatea, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(switchPin), updateSwitch, FALLING);
+
 
   delay(100);
 }
@@ -117,7 +107,7 @@ unsigned int GetKeys1()
   return keys2;
 }
 
-int capactiveValues[8] = {65279, 65407, 65471, 65503,65533,65531,65527, 65519};
+int capactiveValues[8] = {65279, 65407, 65471, 65503, 65533, 65531, 65527, 65519};
 unsigned int touchpadkey;
 void getTouchpad() {
   touchpadkey = GetKeys1();
@@ -137,7 +127,7 @@ void getTouchpad() {
 
 }
 unsigned long new_time3 = millis();
-int capactiveValues3[8] = {65279, 65407, 65471, 65503,65519,65527,65531};
+int capactiveValues3[8] = {65279, 65407, 65471, 65503, 65519, 65527, 65531};
 unsigned int slider3;
 void getSlider3() {
   slider3 = GetKeys2();
@@ -262,4 +252,15 @@ void setSlider3() {
 
   }
 
+}
+void setTouchPad() {
+  for (int i = 0; i < 8; i++) {
+    if (touchkeys.buttonstate[i] == 1) {
+
+      leds[touchkeys.LEDNum[i]] = CRGB(0, 255, 200);
+    }
+    else {
+      leds[touchkeys.LEDNum[i]] = CRGB(255, 200, 0);
+    }
+  }
 }

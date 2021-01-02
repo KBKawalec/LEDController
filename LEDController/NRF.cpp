@@ -10,7 +10,7 @@ RF24 myRadio (10, A1);
 byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
 Package data;
 
-void NRFinitialization() {
+void initializeNRF() {
   //NRF Initialization
   myRadio.begin();
   myRadio.setChannel(115);
@@ -19,7 +19,7 @@ void NRFinitialization() {
   myRadio.openWritingPipe( addresses);
 }
 
-void NRFTransmit() {
+void transmitNRF() {
   myRadio.write(&data, sizeof(data));
 }
 int numberOfLEDS = 30;
