@@ -40,13 +40,17 @@ void displayOLED() {
       if (whichMode[i] == 0) {
         strcpy_P(buffer, (char*)pgm_read_dword(&(string_table[i])));
         oled.println(buffer);
+        
       }
       else if (i == BLINK_MODE || i == BRIGHTNESS_MODE) {
         oled.println(modeCounter[i]);
+       
       }
       else {
         oled.println("TODO");
+        
       }
+      break;
 
     }
 

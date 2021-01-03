@@ -5,13 +5,13 @@
 #include "rotaryEncoderInterrupt.h"
 
 byte tempCount = counter;
-byte tempSwitchCount = switchCounter;
+byte tempButtonCounter = buttonCounter;
 byte tempBlinkCounter = modeCounter[BLINK_MODE];
 byte BRIGHTNESSFlag = modeCounter[BRIGHTNESS_MODE];
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   initialize();
   delay(100);
 
@@ -19,7 +19,6 @@ void setup() {
 }
 
 void loop() {
-
 
 
   unsigned long newt = millis();
@@ -43,14 +42,14 @@ void loop() {
     setSlider2();
 
   }
-  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINK_MODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESS_MODE]) {
+  if (tempKeys2 <= 65533 || tempKeys1 <= 65533 || tempCount != counter || tempButtonCounter != buttonCounter || tempBlinkCounter != modeCounter[BLINK_MODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESS_MODE]) {
     setNRF();
     transmitNRF();
   }
-  if (tempCount != counter || tempSwitchCount != switchCounter || tempBlinkCounter != modeCounter[BLINK_MODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESS_MODE]) {
+  if (tempCount != counter || tempButtonCounter != buttonCounter || tempBlinkCounter != modeCounter[BLINK_MODE] || BRIGHTNESSFlag != modeCounter[BRIGHTNESS_MODE]) {
     displayOLED();
     tempCount = counter;
-    tempSwitchCount = switchCounter;
+    tempButtonCounter = buttonCounter;
     tempBlinkCounter = modeCounter[BLINK_MODE];
     BRIGHTNESSFlag = modeCounter[BRIGHTNESS_MODE];
   }

@@ -15,13 +15,11 @@
 extern void buttonInterrupt();
 extern void rotaryInterrupt();
 extern void initializeRotaryParamaters();
-//extern byte firstMode;
-//extern byte thirdMode;
-//extern byte fifthMode;
-extern byte whichMode[UPPPER_LIMIT_OF_OPTIONS];
-extern byte modeCounter[UPPPER_LIMIT_OF_OPTIONS];
-extern char counter;
-extern byte switchCounter;
+
+extern volatile byte whichMode[UPPPER_LIMIT_OF_OPTIONS];
+extern volatile byte modeCounter[UPPPER_LIMIT_OF_OPTIONS];
+extern volatile char counter;
+extern volatile byte buttonCounter;
 
 
 
