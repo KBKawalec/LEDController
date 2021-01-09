@@ -5,9 +5,18 @@
 
 
 
+const byte numSlaves = 2;
+const byte slaveAddress[numSlaves][6] = {
+  // each slave needs a different address
+  {'j', 'j', 'k', 'a', 'b', 'e'},
+  {'j', 'j', 'k', 'a', 'b', 'F'}
+};
+
+
+
 //NRF
 RF24 myRadio (10, A1);
-byte addresses[6] = {'j', 'j', 'k', 'a', 'b', 'e'};
+//byte addresses[6] = ;
 Package data;
 
 void initializeNRF() {
@@ -16,11 +25,17 @@ void initializeNRF() {
   myRadio.setChannel(115);
   myRadio.setPALevel(RF24_PA_MAX);
   myRadio.setDataRate( RF24_250KBPS ) ;
-  myRadio.openWritingPipe( addresses);
+  // myRadio.openWritingPipe( addresses);
 }
 
 void transmitNRF() {
-  myRadio.write(&data, sizeof(data));
+  for (int i = 0; i < numSlaves; i++) {
+
+    myRadio.openWritingPipe(slaveAddress[i]);
+    myRadio.write(&data, sizeof(data));
+
+  }
+
 }
 
 void setNRF() {

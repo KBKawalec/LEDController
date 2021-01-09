@@ -9,7 +9,7 @@ SSD1306AsciiWire oled;
 const char string_1[] PROGMEM = "Rainbow";
 const char string_2[] PROGMEM = "Dynamic";
 const char string_3[] PROGMEM = "Blink";
-const char string_4[] PROGMEM = "Candle Light";
+const char string_4[] PROGMEM = "Candle\nLight";
 const char string_5[] PROGMEM = "Gradient";
 const char string_6[] PROGMEM = "Brightness";
 char buffer[30]; // buffer for reading the string to (needs to be large enough to take the longest string
@@ -35,7 +35,7 @@ void displayOLED() {
   oled.clear();
   oled.setCursor(0, 4);
   oled.set2X();
-  for (int i = 0; i < UPPPER_LIMIT_OF_OPTIONS; i++) {
+  for (int i = 0; i < 6; i++) {
     if (counter == i) {
       if (whichMode[i] == 0) {
         strcpy_P(buffer, (char*)pgm_read_dword(&(string_table[i])));

@@ -11,7 +11,7 @@
 #define BLINKMODE 2
 #define BRIGHTNESSMODE 5
 #define LED_PIN     2
-#define MAXLEDS 30
+#define MAXLEDS 200
 
 
   extern int NUM_LEDS;
